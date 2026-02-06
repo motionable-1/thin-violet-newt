@@ -194,17 +194,17 @@ export const SocialProofScene: React.FC = () => {
         opacity: exitOpacity,
       }}
     >
-      {/* Section header - vertically centered top area */}
+      {/* Everything in one centered column */}
       <div
         style={{
           position: "absolute",
-          top: 80,
-          left: 0,
-          right: 0,
+          top: "50%",
+          left: "50%",
+          transform: "translate(-50%, -50%)",
           display: "flex",
           flexDirection: "column",
           alignItems: "center",
-          gap: 16,
+          gap: 40,
         }}
       >
         <TextAnimation
@@ -266,28 +266,24 @@ export const SocialProofScene: React.FC = () => {
             creators growing with SuperX
           </span>
         </div>
-      </div>
-
-      {/* Testimonial cards - centered vertically in bottom half */}
-      <div
-        style={{
-          position: "absolute",
-          top: 340,
-          left: 0,
-          right: 0,
-          display: "flex",
-          justifyContent: "center",
-          gap: 24,
-        }}
-      >
-        {TESTIMONIALS.map((testimonial, i) => (
-          <TestimonialCard
-            key={testimonial.author}
-            testimonial={testimonial}
-            delay={45 + i * 15}
-            index={i}
-          />
-        ))}
+        {/* Testimonial cards */}
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "center",
+            gap: 24,
+            marginTop: 8,
+          }}
+        >
+          {TESTIMONIALS.map((testimonial, i) => (
+            <TestimonialCard
+              key={testimonial.author}
+              testimonial={testimonial}
+              delay={45 + i * 15}
+              index={i}
+            />
+          ))}
+        </div>
       </div>
     </div>
   );
