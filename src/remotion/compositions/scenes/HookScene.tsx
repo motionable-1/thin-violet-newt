@@ -15,6 +15,9 @@ const { fontFamily: interFont } = loadFont("normal", {
   subsets: ["latin"],
 });
 
+const X_LOGO_ICON =
+  "https://api.iconify.design/ri/twitter-x-fill.svg?color=%23ffffff&width=60";
+
 export const HookScene: React.FC = () => {
   const frame = useCurrentFrame();
   const { fps } = useVideoConfig();
@@ -45,7 +48,7 @@ export const HookScene: React.FC = () => {
     extrapolateRight: "clamp",
   });
 
-  // Icons for the "pain" visualization
+  // Pain point icons
   const iconOpacity = interpolate(frame, [45, 55], [0, 1], {
     extrapolateLeft: "clamp",
     extrapolateRight: "clamp",
@@ -56,7 +59,7 @@ export const HookScene: React.FC = () => {
     easing: Easing.out(Easing.cubic),
   });
 
-  // Strike-through line on "What to post?"
+  // Strike-through line
   const strikeWidth = interpolate(frame, [85, 100], [0, 100], {
     extrapolateLeft: "clamp",
     extrapolateRight: "clamp",
@@ -73,15 +76,66 @@ export const HookScene: React.FC = () => {
     extrapolateRight: "clamp",
   });
 
+  // Headline word entrance
+  const headlineWords = ["Growing", "on"];
+  const headlineWords2 = ["is"];
+  const hardWord = "hard";
+
+  const wordEntrance = (index: number) => {
+    const delay = index * 4;
+    const s = spring({
+      frame,
+      fps,
+      config: { damping: 12, stiffness: 100 },
+      delay,
+    });
+    const opacity = interpolate(frame, [delay, delay + 8], [0, 1], {
+      extrapolateLeft: "clamp",
+      extrapolateRight: "clamp",
+    });
+    const y = interpolate(frame, [delay, delay + 10], [60, 0], {
+      extrapolateLeft: "clamp",
+      extrapolateRight: "clamp",
+      easing: Easing.out(Easing.back(1.4)),
+    });
+    return { opacity, transform: `translateY(${y}px) scale(${s})` };
+  };
+
+  // X logo entrance
+  const xDelay = 8;
+  const xScale = spring({
+    frame,
+    fps,
+    config: { damping: 10, stiffness: 120 },
+    delay: xDelay,
+  });
+  const xOpacity = interpolate(frame, [xDelay, xDelay + 8], [0, 1], {
+    extrapolateLeft: "clamp",
+    extrapolateRight: "clamp",
+  });
+
+  // "is" word
+  const isDelay = 12;
+  const isStyle = wordEntrance(3);
+
+  // "hard" word
+  const hardDelay = 16;
+  const hardScale = spring({
+    frame,
+    fps,
+    config: { damping: 8, stiffness: 80 },
+    delay: hardDelay,
+  });
+  const hardOpacity = interpolate(frame, [hardDelay, hardDelay + 8], [0, 1], {
+    extrapolateLeft: "clamp",
+    extrapolateRight: "clamp",
+  });
+
   return (
     <div
       style={{
         position: "absolute",
         inset: 0,
-        display: "flex",
-        flexDirection: "column",
-        alignItems: "center",
-        justifyContent: "center",
         fontFamily: interFont,
         opacity: exitOpacity,
         transform: `scale(${exitScale})`,
@@ -91,8 +145,8 @@ export const HookScene: React.FC = () => {
       <div
         style={{
           position: "absolute",
-          top: 160,
-          left: 200,
+          top: 220,
+          left: 240,
           fontSize: 64,
           transform: `scale(${emojiScale}) rotate(${emojiRotate}deg)`,
           opacity: emojiScale,
@@ -105,8 +159,8 @@ export const HookScene: React.FC = () => {
       <div
         style={{
           position: "absolute",
-          top: 140,
-          right: 280,
+          top: 200,
+          right: 320,
           fontSize: 48,
           fontWeight: 800,
           color: "rgba(255,195,103,0.3)",
@@ -119,8 +173,8 @@ export const HookScene: React.FC = () => {
       <div
         style={{
           position: "absolute",
-          top: 200,
-          right: 200,
+          top: 280,
+          right: 240,
           fontSize: 36,
           fontWeight: 800,
           color: "rgba(244,144,12,0.25)",
@@ -133,8 +187,8 @@ export const HookScene: React.FC = () => {
       <div
         style={{
           position: "absolute",
-          top: 120,
-          right: 350,
+          top: 180,
+          right: 400,
           fontSize: 56,
           fontWeight: 800,
           color: "rgba(255,204,77,0.2)",
@@ -145,116 +199,159 @@ export const HookScene: React.FC = () => {
         ?
       </div>
 
-      {/* Main headline */}
-      <TextAnimation
-        className="text-[72px] font-extrabold text-white text-center leading-tight"
-        style={{ fontFamily: interFont, maxWidth: 900, textWrap: "balance" }}
-        startFrom={0}
-        createTimeline={({ textRef, tl, SplitText }) => {
-          const split = new SplitText(textRef.current, {
-            type: "words",
-            wordsClass: "word",
-          });
-          tl.fromTo(
-            split.words,
-            { opacity: 0, y: 60, rotationX: -40 },
-            {
-              opacity: 1,
-              y: 0,
-              rotationX: 0,
-              duration: 0.7,
-              stagger: 0.08,
-              ease: "back.out(1.4)",
-            },
-          );
-          return tl;
-        }}
-        perspective={800}
-      >
-        Growing on 𝕏 is <span style={{ color: "#FFC367" }}>hard</span>
-      </TextAnimation>
-
-      {/* Subline with pain points */}
+      {/* Main headline - manually built for inline X logo */}
       <div
         style={{
-          marginTop: 32,
-          opacity: iconOpacity,
-          transform: `translateY(${iconY}px)`,
+          position: "absolute",
+          top: "42%",
+          left: "50%",
+          transform: "translate(-50%, -50%)",
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
         }}
       >
-        <div style={{ display: "flex", gap: 48, alignItems: "center" }}>
-          {[
-            {
-              icon: "https://api.iconify.design/ph/clock-countdown-bold.svg?color=%23888888&width=28",
-              text: "Hours creating content",
-            },
-            {
-              icon: "https://api.iconify.design/ph/chart-line-down-bold.svg?color=%23888888&width=28",
-              text: "Low engagement",
-            },
-            {
-              icon: "https://api.iconify.design/ph/brain-bold.svg?color=%23888888&width=28",
-              text: "No content ideas",
-            },
-          ].map((item, i) => (
-            <div
-              key={i}
-              style={{
-                display: "flex",
-                alignItems: "center",
-                gap: 10,
-                opacity: interpolate(frame, [50 + i * 8, 60 + i * 8], [0, 1], {
-                  extrapolateLeft: "clamp",
-                  extrapolateRight: "clamp",
-                }),
-                transform: `translateY(${interpolate(frame, [50 + i * 8, 60 + i * 8], [15, 0], { extrapolateLeft: "clamp", extrapolateRight: "clamp" })}px)`,
-              }}
-            >
-              <Img src={item.icon} style={{ width: 28, height: 28 }} />
-              <span
-                style={{
-                  fontFamily: interFont,
-                  fontSize: 20,
-                  color: "#888",
-                  fontWeight: 500,
-                }}
-              >
-                {item.text}
-              </span>
-            </div>
-          ))}
-        </div>
-      </div>
-
-      {/* "What should I post?" with strikethrough */}
-      <div style={{ position: "relative", marginTop: 48 }}>
-        <TextAnimation
-          className="text-[32px] font-medium text-center"
-          style={{ fontFamily: interFont, color: "rgba(255,255,255,0.4)" }}
-          startFrom={22}
-          createTimeline={({ textRef, tl }) => {
-            tl.fromTo(
-              textRef.current,
-              { opacity: 0, y: 20 },
-              { opacity: 1, y: 0, duration: 0.5, ease: "power2.out" },
-            );
-            return tl;
-          }}
-        >
-          &quot;What should I even post today?&quot;
-        </TextAnimation>
-        {/* Strikethrough line */}
+        {/* Headline row */}
         <div
           style={{
-            position: "absolute",
-            top: "50%",
-            left: 0,
-            height: 3,
-            background: "linear-gradient(90deg, #FFC367, #F4900C)",
-            width: `${strikeWidth}%`,
-            borderRadius: 2,
+            display: "flex",
+            alignItems: "center",
+            gap: 18,
+            fontSize: 72,
+            fontWeight: 800,
+            color: "#fff",
+            lineHeight: 1.1,
           }}
-        />
+        >
+          {headlineWords.map((word, i) => (
+            <span key={word} style={wordEntrance(i)}>
+              {word}
+            </span>
+          ))}
+
+          {/* X logo inline */}
+          <div
+            style={{
+              opacity: xOpacity,
+              transform: `scale(${xScale})`,
+              display: "flex",
+              alignItems: "center",
+            }}
+          >
+            <Img
+              src={X_LOGO_ICON}
+              style={{ width: 60, height: 60 }}
+            />
+          </div>
+
+          <span style={isStyle}>is</span>
+
+          <span
+            style={{
+              color: "#FFC367",
+              opacity: hardOpacity,
+              transform: `scale(${hardScale})`,
+              display: "inline-block",
+            }}
+          >
+            {hardWord}
+          </span>
+        </div>
+
+        {/* Subline with pain points */}
+        <div
+          style={{
+            marginTop: 48,
+            opacity: iconOpacity,
+            transform: `translateY(${iconY}px)`,
+          }}
+        >
+          <div
+            style={{
+              display: "flex",
+              gap: 48,
+              alignItems: "center",
+              justifyContent: "center",
+            }}
+          >
+            {[
+              {
+                icon: "https://api.iconify.design/ph/clock-countdown-bold.svg?color=%23999999&width=28",
+                text: "Hours creating content",
+              },
+              {
+                icon: "https://api.iconify.design/ph/chart-line-down-bold.svg?color=%23999999&width=28",
+                text: "Low engagement",
+              },
+              {
+                icon: "https://api.iconify.design/ph/brain-bold.svg?color=%23999999&width=28",
+                text: "No content ideas",
+              },
+            ].map((item, i) => (
+              <div
+                key={i}
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  gap: 10,
+                  opacity: interpolate(
+                    frame,
+                    [50 + i * 8, 60 + i * 8],
+                    [0, 1],
+                    {
+                      extrapolateLeft: "clamp",
+                      extrapolateRight: "clamp",
+                    },
+                  ),
+                  transform: `translateY(${interpolate(frame, [50 + i * 8, 60 + i * 8], [15, 0], { extrapolateLeft: "clamp", extrapolateRight: "clamp" })}px)`,
+                }}
+              >
+                <Img src={item.icon} style={{ width: 28, height: 28 }} />
+                <span
+                  style={{
+                    fontFamily: interFont,
+                    fontSize: 22,
+                    color: "#aaa",
+                    fontWeight: 500,
+                  }}
+                >
+                  {item.text}
+                </span>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* "What should I post?" with strikethrough */}
+        <div style={{ position: "relative", marginTop: 52 }}>
+          <TextAnimation
+            className="text-[34px] font-medium text-center"
+            style={{ fontFamily: interFont, color: "rgba(255,255,255,0.45)" }}
+            startFrom={22}
+            createTimeline={({ textRef, tl }) => {
+              tl.fromTo(
+                textRef.current,
+                { opacity: 0, y: 20 },
+                { opacity: 1, y: 0, duration: 0.5, ease: "power2.out" },
+              );
+              return tl;
+            }}
+          >
+            &quot;What should I even post today?&quot;
+          </TextAnimation>
+          {/* Strikethrough line */}
+          <div
+            style={{
+              position: "absolute",
+              top: "50%",
+              left: 0,
+              height: 3,
+              background: "linear-gradient(90deg, #FFC367, #F4900C)",
+              width: `${strikeWidth}%`,
+              borderRadius: 2,
+            }}
+          />
+        </div>
       </div>
     </div>
   );
