@@ -160,95 +160,96 @@ export const FeatureShowcaseScene: React.FC = () => {
         opacity: exitOpacity,
       }}
     >
-      {/* Section title */}
+      {/* Vertically centered content wrapper */}
       <div
         style={{
           position: "absolute",
-          top: 48,
-          left: 0,
-          right: 0,
-          display: "flex",
-          justifyContent: "center",
-          opacity: titleOpacity,
-        }}
-      >
-        <TextAnimation
-          className="text-[18px] font-semibold text-center"
-          style={{
-            fontFamily: interFont,
-            color: "#FFC367",
-            letterSpacing: 3,
-            textTransform: "uppercase",
-          }}
-          startFrom={0}
-          createTimeline={({ textRef, tl, SplitText }) => {
-            const split = new SplitText(textRef.current, { type: "chars" });
-            tl.fromTo(
-              split.chars,
-              { opacity: 0, y: 10 },
-              {
-                opacity: 1,
-                y: 0,
-                duration: 0.4,
-                stagger: 0.03,
-                ease: "power2.out",
-              },
-            );
-            return tl;
-          }}
-        >
-          Everything you need to grow on X
-        </TextAnimation>
-      </div>
-
-      {/* Browser mockup - center, bigger */}
-      <div
-        style={{
-          position: "absolute",
-          top: 100,
+          top: "50%",
           left: "50%",
-          transform: `translateX(-50%) translateY(${mockupY}px) scale(${mockupScale})`,
-          opacity: mockupOpacity,
-        }}
-      >
-        <BrowserMockup
-          url="superx.so"
-          browser="chrome"
-          theme="dark"
-          tabTitle="SuperX Dashboard"
-          shadow
-          width={900}
-          height={480}
-          borderRadius={12}
-        >
-          <Img
-            src={DASHBOARD_IMG}
-            style={{ width: "100%", height: "100%", objectFit: "cover" }}
-          />
-        </BrowserMockup>
-      </div>
-
-      {/* Feature cards - bottom row, higher up */}
-      <div
-        style={{
-          position: "absolute",
-          bottom: 100,
-          left: 0,
-          right: 0,
+          transform: "translate(-50%, -50%)",
           display: "flex",
-          justifyContent: "center",
-          gap: 16,
+          flexDirection: "column",
+          alignItems: "center",
+          gap: 24,
         }}
       >
-        {features.map((feat, i) => (
-          <FeatureCard
-            key={feat.title}
-            icon={feat.icon}
-            title={feat.title}
-            description={feat.description}
-            delay={60 + i * 12}
-          />
-        ))}
+        {/* Section title */}
+        <div
+          style={{
+            opacity: titleOpacity,
+          }}
+        >
+          <TextAnimation
+            className="text-[18px] font-semibold text-center"
+            style={{
+              fontFamily: interFont,
+              color: "#FFC367",
+              letterSpacing: 3,
+              textTransform: "uppercase",
+            }}
+            startFrom={0}
+            createTimeline={({ textRef, tl, SplitText }) => {
+              const split = new SplitText(textRef.current, { type: "chars" });
+              tl.fromTo(
+                split.chars,
+                { opacity: 0, y: 10 },
+                {
+                  opacity: 1,
+                  y: 0,
+                  duration: 0.4,
+                  stagger: 0.03,
+                  ease: "power2.out",
+                },
+              );
+              return tl;
+            }}
+          >
+            Everything you need to grow on X
+          </TextAnimation>
+        </div>
+
+        {/* Browser mockup */}
+        <div
+          style={{
+            transform: `translateY(${mockupY}px) scale(${mockupScale})`,
+            opacity: mockupOpacity,
+          }}
+        >
+          <BrowserMockup
+            url="superx.so"
+            browser="chrome"
+            theme="dark"
+            tabTitle="SuperX Dashboard"
+            shadow
+            width={880}
+            height={460}
+            borderRadius={12}
+          >
+            <Img
+              src={DASHBOARD_IMG}
+              style={{ width: "100%", height: "100%", objectFit: "cover" }}
+            />
+          </BrowserMockup>
+        </div>
+
+        {/* Feature cards */}
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "center",
+            gap: 16,
+          }}
+        >
+          {features.map((feat, i) => (
+            <FeatureCard
+              key={feat.title}
+              icon={feat.icon}
+              title={feat.title}
+              description={feat.description}
+              delay={60 + i * 12}
+            />
+          ))}
+        </div>
       </div>
     </div>
   );
