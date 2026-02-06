@@ -52,28 +52,28 @@ const FeatureCard: React.FC<FeatureCardProps> = ({
         display: "flex",
         alignItems: "flex-start",
         gap: 14,
-        padding: "16px 20px",
-        borderRadius: 16,
+        padding: "14px 18px",
+        borderRadius: 14,
         background: "rgba(255,255,255,0.04)",
         border: "1px solid rgba(255,255,255,0.08)",
         backdropFilter: "blur(10px)",
         opacity: cardOpacity,
         transform: `scale(${cardScale})`,
-        width: 280,
+        width: 260,
       }}
     >
       <Img
         src={icon}
-        style={{ width: 32, height: 32, flexShrink: 0, marginTop: 2 }}
+        style={{ width: 28, height: 28, flexShrink: 0, marginTop: 2 }}
       />
       <div>
         <div
           style={{
             fontFamily: interFont,
-            fontSize: 16,
+            fontSize: 15,
             fontWeight: 700,
             color: "#fff",
-            marginBottom: 4,
+            marginBottom: 3,
           }}
         >
           {title}
@@ -81,7 +81,7 @@ const FeatureCard: React.FC<FeatureCardProps> = ({
         <div
           style={{
             fontFamily: interFont,
-            fontSize: 13,
+            fontSize: 12,
             fontWeight: 400,
             color: "rgba(255,255,255,0.5)",
             lineHeight: 1.4,
@@ -124,22 +124,22 @@ export const FeatureShowcaseScene: React.FC = () => {
   // Feature cards
   const features = [
     {
-      icon: "https://api.iconify.design/ph/magic-wand-fill.svg?color=%23FFC367&width=32",
+      icon: "https://api.iconify.design/ph/magic-wand-fill.svg?color=%23FFC367&width=28",
       title: "AI Content Studio",
       description: "Write tweets that sound like you, not a robot",
     },
     {
-      icon: "https://api.iconify.design/ph/chart-bar-fill.svg?color=%23FFC367&width=32",
+      icon: "https://api.iconify.design/ph/chart-bar-fill.svg?color=%23FFC367&width=28",
       title: "Smart Analytics",
       description: "See what works and double down on winners",
     },
     {
-      icon: "https://api.iconify.design/ph/compass-fill.svg?color=%23FFC367&width=32",
+      icon: "https://api.iconify.design/ph/compass-fill.svg?color=%23FFC367&width=28",
       title: "Inspiration Engine",
       description: "Never run out of content ideas again",
     },
     {
-      icon: "https://api.iconify.design/ph/calendar-check-fill.svg?color=%23FFC367&width=32",
+      icon: "https://api.iconify.design/ph/calendar-check-fill.svg?color=%23FFC367&width=28",
       title: "Smart Scheduler",
       description: "Post at the perfect time, every time",
     },
@@ -164,7 +164,7 @@ export const FeatureShowcaseScene: React.FC = () => {
       <div
         style={{
           position: "absolute",
-          top: 50,
+          top: 48,
           left: 0,
           right: 0,
           display: "flex",
@@ -173,7 +173,7 @@ export const FeatureShowcaseScene: React.FC = () => {
         }}
       >
         <TextAnimation
-          className="text-[20px] font-semibold text-center"
+          className="text-[18px] font-semibold text-center"
           style={{
             fontFamily: interFont,
             color: "#FFC367",
@@ -197,15 +197,15 @@ export const FeatureShowcaseScene: React.FC = () => {
             return tl;
           }}
         >
-          Everything you need to dominate 𝕏
+          Everything you need to grow on X
         </TextAnimation>
       </div>
 
-      {/* Browser mockup - center */}
+      {/* Browser mockup - center, bigger */}
       <div
         style={{
           position: "absolute",
-          top: 110,
+          top: 100,
           left: "50%",
           transform: `translateX(-50%) translateY(${mockupY}px) scale(${mockupScale})`,
           opacity: mockupOpacity,
@@ -217,8 +217,8 @@ export const FeatureShowcaseScene: React.FC = () => {
           theme="dark"
           tabTitle="SuperX Dashboard"
           shadow
-          width={780}
-          height={440}
+          width={900}
+          height={480}
           borderRadius={12}
         >
           <Img
@@ -228,16 +228,16 @@ export const FeatureShowcaseScene: React.FC = () => {
         </BrowserMockup>
       </div>
 
-      {/* Feature cards - bottom row */}
+      {/* Feature cards - bottom row, higher up */}
       <div
         style={{
           position: "absolute",
-          bottom: 60,
+          bottom: 100,
           left: 0,
           right: 0,
           display: "flex",
           justifyContent: "center",
-          gap: 20,
+          gap: 16,
         }}
       >
         {features.map((feat, i) => (

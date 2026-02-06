@@ -17,21 +17,21 @@ const { fontFamily: interFont } = loadFont("normal", {
 
 const TESTIMONIALS = [
   {
-    text: "SuperX is a must-have for any active 𝕏 users. It's my most favorite chrome extension now 🤓",
+    text: "SuperX is a must-have for any active X user. It's my most favorite chrome extension now.",
     author: "Alexander Isora",
     handle: "@isora",
     avatar:
       "https://pub-e3bfc0083b0644b296a7080b21024c5f.r2.dev/superx/1770418090735_e69mtwcjrc6_avatar_alexander.png",
   },
   {
-    text: "SuperX is a banger product! I've tried various options, even built my own, but I ended up decommissioning it because SuperX has everything I need.",
+    text: "SuperX is a banger product! I've tried various options, even built my own, but SuperX has everything I need.",
     author: "Marius",
     handle: "@marius",
     avatar:
       "https://pub-e3bfc0083b0644b296a7080b21024c5f.r2.dev/superx/1770418086813_hd1k4p1tmwf_avatar_marius.png",
   },
   {
-    text: "The Content Studio + Inspiration feature combo makes this OP. Makes showing up daily so much easier.",
+    text: "The Content Studio + Inspiration combo makes this OP. Showing up daily is so much easier now.",
     author: "Jazz",
     handle: "@jazz",
     avatar:
@@ -70,9 +70,9 @@ const TestimonialCard: React.FC<TestimonialCardProps> = ({
   return (
     <div
       style={{
-        width: 360,
-        padding: "28px 24px",
-        borderRadius: 20,
+        width: 340,
+        padding: "24px 22px",
+        borderRadius: 18,
         background: "rgba(255,255,255,0.04)",
         border: "1px solid rgba(255,255,255,0.08)",
         backdropFilter: "blur(12px)",
@@ -80,13 +80,13 @@ const TestimonialCard: React.FC<TestimonialCardProps> = ({
         transform: `scale(${cardScale}) translateY(${floatY}px)`,
         display: "flex",
         flexDirection: "column",
-        gap: 16,
+        gap: 12,
       }}
     >
       {/* Quote mark */}
       <div
         style={{
-          fontSize: 40,
+          fontSize: 36,
           lineHeight: 1,
           color: "rgba(255,195,103,0.3)",
           fontFamily: "Georgia, serif",
@@ -102,8 +102,8 @@ const TestimonialCard: React.FC<TestimonialCardProps> = ({
           fontSize: 15,
           fontWeight: 400,
           color: "rgba(255,255,255,0.75)",
-          lineHeight: 1.6,
-          marginTop: -12,
+          lineHeight: 1.55,
+          marginTop: -8,
         }}
       >
         {testimonial.text}
@@ -111,13 +111,18 @@ const TestimonialCard: React.FC<TestimonialCardProps> = ({
 
       {/* Author */}
       <div
-        style={{ display: "flex", alignItems: "center", gap: 12, marginTop: 8 }}
+        style={{
+          display: "flex",
+          alignItems: "center",
+          gap: 12,
+          marginTop: 4,
+        }}
       >
         <Img
           src={testimonial.avatar}
           style={{
-            width: 36,
-            height: 36,
+            width: 34,
+            height: 34,
             borderRadius: "50%",
             objectFit: "cover",
             border: "2px solid rgba(255,195,103,0.3)",
@@ -189,17 +194,17 @@ export const SocialProofScene: React.FC = () => {
         opacity: exitOpacity,
       }}
     >
-      {/* Section header */}
+      {/* Section header - vertically centered top area */}
       <div
         style={{
           position: "absolute",
-          top: 60,
+          top: 80,
           left: 0,
           right: 0,
           display: "flex",
           flexDirection: "column",
           alignItems: "center",
-          gap: 12,
+          gap: 16,
         }}
       >
         <TextAnimation
@@ -237,7 +242,7 @@ export const SocialProofScene: React.FC = () => {
             transform: `scale(${statsScale})`,
             display: "flex",
             alignItems: "baseline",
-            gap: 8,
+            gap: 12,
           }}
         >
           <span
@@ -253,7 +258,7 @@ export const SocialProofScene: React.FC = () => {
           <span
             style={{
               fontFamily: interFont,
-              fontSize: 22,
+              fontSize: 20,
               fontWeight: 500,
               color: "rgba(255,255,255,0.4)",
             }}
@@ -263,11 +268,11 @@ export const SocialProofScene: React.FC = () => {
         </div>
       </div>
 
-      {/* Testimonial cards */}
+      {/* Testimonial cards - centered vertically in bottom half */}
       <div
         style={{
           position: "absolute",
-          bottom: 80,
+          top: 340,
           left: 0,
           right: 0,
           display: "flex",
