@@ -1,10 +1,12 @@
-import React from "react";
+import React, { useCallback } from "react";
 import {
   AbsoluteFill,
   Artifact,
   useCurrentFrame,
+  useVideoConfig,
   Audio,
   Sequence,
+  interpolate,
 } from "remotion";
 import { TransitionSeries, linearTiming } from "@remotion/transitions";
 import { fade } from "@remotion/transitions/fade";
@@ -24,6 +26,10 @@ const WHOOSH_SFX =
 const CHIME_SFX =
   "https://pub-e3bfc0083b0644b296a7080b21024c5f.r2.dev/sfx/1770418096521_r3vl8wtfq4q_sfx_soft_uplifting_chime_notificat.mp3";
 
+// Background music
+const BG_MUSIC =
+  "https://pub-e3bfc0083b0644b296a7080b21024c5f.r2.dev/music/1770420113749_1dz65qsxld7_music_Upbeat_modern_tech_s.mp3";
+
 /*
  * Scene durations (in frames at 30fps):
  * 1. Hook:            130 frames (~4.3s)
@@ -38,8 +44,31 @@ const CHIME_SFX =
 
 const TRANSITION_DURATION = 15;
 
+const TOTAL_FRAMES = 695;
+const FADE_IN_FRAMES = 30;
+const FADE_OUT_FRAMES = 45;
+
 export const Main: React.FC = () => {
   const frame = useCurrentFrame();
+  const { fps } = useVideoConfig();
+
+  // Background music volume: fade in at start, fade out at end
+  const musicVolume = useCallback(
+    (f: number) => {
+      const fadeIn = interpolate(f, [0, FADE_IN_FRAMES], [0, 1], {
+        extrapolateLeft: "clamp",
+        extrapolateRight: "clamp",
+      });
+      const fadeOut = interpolate(
+        f,
+        [TOTAL_FRAMES - FADE_OUT_FRAMES, TOTAL_FRAMES],
+        [1, 0],
+        { extrapolateLeft: "clamp", extrapolateRight: "clamp" },
+      );
+      return fadeIn * fadeOut * 0.35;
+    },
+    [fps],
+  );
 
   return (
     <>
@@ -112,6 +141,9 @@ export const Main: React.FC = () => {
           </TransitionSeries.Sequence>
         </TransitionSeries>
       </AbsoluteFill>
+
+      {/* Background music */}
+      <Audio src={BG_MUSIC} volume={musicVolume} />
 
       {/* Sound effects at transitions */}
       <Sequence from={120}>
