@@ -8,51 +8,143 @@ import {
   Easing,
 } from "remotion";
 import { TextAnimation } from "../../library/components/text/TextAnimation";
-import { Counter } from "../../library/components/text/Counter";
 import { loadFont } from "@remotion/google-fonts/Inter";
 
 const { fontFamily: interFont } = loadFont("normal", {
-  weights: ["400", "600", "700", "800"],
+  weights: ["400", "500", "600", "700", "800"],
   subsets: ["latin"],
 });
 
-interface TestimonialProps {
-  name: string;
-  text: string;
+const TESTIMONIALS = [
+  {
+    text: "SuperX is a must-have for any active 𝕏 users. It's my most favorite chrome extension now 🤓",
+    author: "Alexander Isora",
+    handle: "@isora",
+    avatar:
+      "https://pub-e3bfc0083b0644b296a7080b21024c5f.r2.dev/superx/1770418090735_e69mtwcjrc6_avatar_alexander.png",
+  },
+  {
+    text: "SuperX is a banger product! I've tried various options, even built my own, but I ended up decommissioning it because SuperX has everything I need.",
+    author: "Marius",
+    handle: "@marius",
+    avatar:
+      "https://pub-e3bfc0083b0644b296a7080b21024c5f.r2.dev/superx/1770418086813_hd1k4p1tmwf_avatar_marius.png",
+  },
+  {
+    text: "The Content Studio + Inspiration feature combo makes this OP. Makes showing up daily so much easier.",
+    author: "Jazz",
+    handle: "@jazz",
+    avatar:
+      "https://pub-e3bfc0083b0644b296a7080b21024c5f.r2.dev/superx/1770418088575_u1ti38wzcrf_avatar_jazz.png",
+  },
+];
+
+interface TestimonialCardProps {
+  testimonial: (typeof TESTIMONIALS)[0];
   delay: number;
-  x: number;
-  y: number;
+  index: number;
 }
 
-const Testimonial: React.FC<TestimonialProps> = ({ name, text, delay, x, y }) => {
+const TestimonialCard: React.FC<TestimonialCardProps> = ({
+  testimonial,
+  delay,
+  index,
+}) => {
   const frame = useCurrentFrame();
   const { fps } = useVideoConfig();
 
-  const scale = spring({ frame, fps, config: { damping: 14, stiffness: 100 }, delay });
-  const opacity = interpolate(frame, [delay, delay + 12], [0, 1], { extrapolateLeft: "clamp", extrapolateRight: "clamp" });
-  const floatY = Math.sin((frame - delay) * 0.03) * 4;
+  const cardScale = spring({
+    frame,
+    fps,
+    config: { damping: 12, stiffness: 80 },
+    delay,
+  });
+  const cardOpacity = interpolate(frame, [delay, delay + 10], [0, 1], {
+    extrapolateLeft: "clamp",
+    extrapolateRight: "clamp",
+  });
+
+  // Subtle float
+  const floatY = Math.sin((frame + index * 20) * 0.03) * 3;
 
   return (
     <div
       style={{
-        position: "absolute",
-        left: x,
-        top: y,
-        maxWidth: 380,
-        padding: "20px 24px",
-        borderRadius: 16,
-        background: "rgba(255,255,255,0.05)",
-        border: "1px solid rgba(255,255,255,0.1)",
+        width: 360,
+        padding: "28px 24px",
+        borderRadius: 20,
+        background: "rgba(255,255,255,0.04)",
+        border: "1px solid rgba(255,255,255,0.08)",
         backdropFilter: "blur(12px)",
-        opacity,
-        transform: `scale(${scale}) translateY(${floatY}px)`,
+        opacity: cardOpacity,
+        transform: `scale(${cardScale}) translateY(${floatY}px)`,
+        display: "flex",
+        flexDirection: "column",
+        gap: 16,
       }}
     >
-      <div style={{ fontFamily: interFont, fontSize: 15, color: "rgba(255,255,255,0.75)", lineHeight: 1.5, fontStyle: "italic" }}>
-        &ldquo;{text}&rdquo;
+      {/* Quote mark */}
+      <div
+        style={{
+          fontSize: 40,
+          lineHeight: 1,
+          color: "rgba(255,195,103,0.3)",
+          fontFamily: "Georgia, serif",
+        }}
+      >
+        &ldquo;
       </div>
-      <div style={{ fontFamily: interFont, fontSize: 13, fontWeight: 700, color: "#FFC367", marginTop: 12 }}>
-        — {name}
+
+      {/* Quote text */}
+      <div
+        style={{
+          fontFamily: interFont,
+          fontSize: 15,
+          fontWeight: 400,
+          color: "rgba(255,255,255,0.75)",
+          lineHeight: 1.6,
+          marginTop: -12,
+        }}
+      >
+        {testimonial.text}
+      </div>
+
+      {/* Author */}
+      <div
+        style={{ display: "flex", alignItems: "center", gap: 12, marginTop: 8 }}
+      >
+        <Img
+          src={testimonial.avatar}
+          style={{
+            width: 36,
+            height: 36,
+            borderRadius: "50%",
+            objectFit: "cover",
+            border: "2px solid rgba(255,195,103,0.3)",
+          }}
+        />
+        <div>
+          <div
+            style={{
+              fontFamily: interFont,
+              fontSize: 14,
+              fontWeight: 600,
+              color: "#fff",
+            }}
+          >
+            {testimonial.author}
+          </div>
+          <div
+            style={{
+              fontFamily: interFont,
+              fontSize: 12,
+              fontWeight: 400,
+              color: "rgba(255,255,255,0.4)",
+            }}
+          >
+            {testimonial.handle}
+          </div>
+        </div>
       </div>
     </div>
   );
@@ -62,39 +154,31 @@ export const SocialProofScene: React.FC = () => {
   const frame = useCurrentFrame();
   const { fps } = useVideoConfig();
 
-  // Stats counter
-  const statsOpacity = interpolate(frame, [15, 30], [0, 1], { extrapolateLeft: "clamp", extrapolateRight: "clamp" });
-  const statsY = interpolate(frame, [15, 30], [20, 0], { extrapolateLeft: "clamp", extrapolateRight: "clamp", easing: Easing.out(Easing.cubic) });
+  // Stats counter animation
+  const creatorsCount = Math.floor(
+    interpolate(frame, [20, 60], [0, 1458], {
+      extrapolateLeft: "clamp",
+      extrapolateRight: "clamp",
+      easing: Easing.out(Easing.cubic),
+    }),
+  );
 
-  // Star icons
-  const starsOpacity = interpolate(frame, [35, 45], [0, 1], { extrapolateLeft: "clamp", extrapolateRight: "clamp" });
+  const statsOpacity = interpolate(frame, [10, 22], [0, 1], {
+    extrapolateLeft: "clamp",
+    extrapolateRight: "clamp",
+  });
+  const statsScale = spring({
+    frame,
+    fps,
+    config: { damping: 14, stiffness: 100 },
+    delay: 10,
+  });
 
   // Exit
-  const exitOpacity = interpolate(frame, [135, 150], [1, 0], { extrapolateLeft: "clamp", extrapolateRight: "clamp" });
-
-  const testimonials = [
-    {
-      name: "Marius",
-      text: "SuperX is a banger product! I've tried various options, but SuperX has everything I need.",
-      x: 80,
-      y: 340,
-      delay: 45,
-    },
-    {
-      name: "Alexander Isora",
-      text: "SuperX is a must-have for any active 𝕏 user. It's my most favorite chrome extension now.",
-      x: 520,
-      y: 300,
-      delay: 60,
-    },
-    {
-      name: "Jazz",
-      text: "The Content Studio + Inspiration combo makes this OP. Makes showing up daily so much easier.",
-      x: 980,
-      y: 360,
-      delay: 75,
-    },
-  ];
+  const exitOpacity = interpolate(frame, [140, 155], [1, 0], {
+    extrapolateLeft: "clamp",
+    extrapolateRight: "clamp",
+  });
 
   return (
     <div
@@ -105,103 +189,101 @@ export const SocialProofScene: React.FC = () => {
         opacity: exitOpacity,
       }}
     >
-      {/* Title */}
-      <div style={{ position: "absolute", top: 60, left: 0, right: 0, display: "flex", justifyContent: "center" }}>
+      {/* Section header */}
+      <div
+        style={{
+          position: "absolute",
+          top: 60,
+          left: 0,
+          right: 0,
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          gap: 12,
+        }}
+      >
         <TextAnimation
-          className="text-[20px] font-semibold text-center"
-          style={{ fontFamily: interFont, color: "#FFC367", letterSpacing: 3, textTransform: "uppercase" }}
+          className="text-[18px] font-semibold text-center"
+          style={{
+            fontFamily: interFont,
+            color: "#FFC367",
+            letterSpacing: 3,
+            textTransform: "uppercase",
+          }}
           startFrom={0}
           createTimeline={({ textRef, tl, SplitText }) => {
             const split = new SplitText(textRef.current, { type: "chars" });
             tl.fromTo(
               split.chars,
-              { opacity: 0, scale: 0.5 },
-              { opacity: 1, scale: 1, duration: 0.4, stagger: 0.03, ease: "back.out(2)" }
+              { opacity: 0, scale: 0.8 },
+              {
+                opacity: 1,
+                scale: 1,
+                duration: 0.3,
+                stagger: 0.02,
+                ease: "back.out(1.5)",
+              },
             );
             return tl;
           }}
         >
-          Loved by creators worldwide
+          Trusted by creators
         </TextAnimation>
+
+        {/* Big stats number */}
+        <div
+          style={{
+            opacity: statsOpacity,
+            transform: `scale(${statsScale})`,
+            display: "flex",
+            alignItems: "baseline",
+            gap: 8,
+          }}
+        >
+          <span
+            style={{
+              fontFamily: interFont,
+              fontSize: 64,
+              fontWeight: 800,
+              color: "#fff",
+            }}
+          >
+            {creatorsCount.toLocaleString()}+
+          </span>
+          <span
+            style={{
+              fontFamily: interFont,
+              fontSize: 22,
+              fontWeight: 500,
+              color: "rgba(255,255,255,0.4)",
+            }}
+          >
+            creators growing with SuperX
+          </span>
+        </div>
       </div>
 
-      {/* Stats row */}
+      {/* Testimonial cards */}
       <div
         style={{
           position: "absolute",
-          top: 130,
+          bottom: 80,
           left: 0,
           right: 0,
           display: "flex",
           justifyContent: "center",
-          gap: 80,
-          opacity: statsOpacity,
-          transform: `translateY(${statsY}px)`,
+          gap: 24,
         }}
       >
-        {[
-          { value: 1458, label: "Active Creators", suffix: "+" },
-          { value: 5000, label: "Posts Generated", suffix: "+" },
-          { value: 4.9, label: "Chrome Store Rating", suffix: "★" },
-        ].map((stat, i) => {
-          const statScale = spring({ frame, fps, config: { damping: 14, stiffness: 100 }, delay: 18 + i * 6 });
-          return (
-            <div
-              key={stat.label}
-              style={{
-                display: "flex",
-                flexDirection: "column",
-                alignItems: "center",
-                transform: `scale(${statScale})`,
-              }}
-            >
-              <div style={{ display: "flex", alignItems: "baseline", gap: 4 }}>
-                <Counter
-                  from={0}
-                  to={stat.value}
-                  startFrom={18 + i * 6}
-                  duration={40}
-                  style={{ fontFamily: interFont, fontSize: 52, fontWeight: 800, color: "#fff" }}
-                  decimals={stat.value < 10 ? 1 : 0}
-                />
-                <span style={{ fontFamily: interFont, fontSize: 28, fontWeight: 700, color: "#FFC367" }}>
-                  {stat.suffix}
-                </span>
-              </div>
-              <span style={{ fontFamily: interFont, fontSize: 15, fontWeight: 500, color: "rgba(255,255,255,0.45)", marginTop: 4 }}>
-                {stat.label}
-              </span>
-            </div>
-          );
-        })}
+        {TESTIMONIALS.map((testimonial, i) => (
+          <TestimonialCard
+            key={testimonial.author}
+            testimonial={testimonial}
+            delay={45 + i * 15}
+            index={i}
+          />
+        ))}
       </div>
-
-      {/* Five stars */}
-      <div
-        style={{
-          position: "absolute",
-          top: 270,
-          left: "50%",
-          transform: "translateX(-50%)",
-          display: "flex",
-          gap: 8,
-          opacity: starsOpacity,
-        }}
-      >
-        {[0, 1, 2, 3, 4].map((i) => {
-          const starScale = spring({ frame, fps, config: { damping: 10, stiffness: 150 }, delay: 36 + i * 3 });
-          return (
-            <div key={i} style={{ transform: `scale(${starScale})`, fontSize: 28, color: "#FFC367" }}>
-              ⭐
-            </div>
-          );
-        })}
-      </div>
-
-      {/* Testimonials */}
-      {testimonials.map((t) => (
-        <Testimonial key={t.name} {...t} />
-      ))}
     </div>
   );
 };

@@ -23,25 +23,58 @@ export const ProductRevealScene: React.FC = () => {
   const { fps } = useVideoConfig();
 
   // Logo entrance
-  const logoScale = spring({ frame, fps, config: { damping: 10, stiffness: 80 }, delay: 5 });
-  const logoOpacity = interpolate(frame, [5, 15], [0, 1], { extrapolateLeft: "clamp", extrapolateRight: "clamp" });
+  const logoScale = spring({
+    frame,
+    fps,
+    config: { damping: 10, stiffness: 80 },
+    delay: 5,
+  });
+  const logoOpacity = interpolate(frame, [5, 15], [0, 1], {
+    extrapolateLeft: "clamp",
+    extrapolateRight: "clamp",
+  });
 
   // Glow pulse behind logo
-  const glowIntensity = interpolate(frame, [15, 40], [0, 1], { extrapolateLeft: "clamp", extrapolateRight: "clamp" });
+  const glowIntensity = interpolate(frame, [15, 40], [0, 1], {
+    extrapolateLeft: "clamp",
+    extrapolateRight: "clamp",
+  });
 
   // Tagline
-  const taglineOpacity = interpolate(frame, [30, 42], [0, 1], { extrapolateLeft: "clamp", extrapolateRight: "clamp" });
-  const taglineY = interpolate(frame, [30, 42], [30, 0], { extrapolateLeft: "clamp", extrapolateRight: "clamp", easing: Easing.out(Easing.cubic) });
+  const taglineOpacity = interpolate(frame, [30, 42], [0, 1], {
+    extrapolateLeft: "clamp",
+    extrapolateRight: "clamp",
+  });
+  const taglineY = interpolate(frame, [30, 42], [30, 0], {
+    extrapolateLeft: "clamp",
+    extrapolateRight: "clamp",
+    easing: Easing.out(Easing.cubic),
+  });
 
   // "Meet SuperX" text
-  const meetOpacity = interpolate(frame, [0, 10], [0, 1], { extrapolateLeft: "clamp", extrapolateRight: "clamp" });
-  const meetY = interpolate(frame, [0, 10], [20, 0], { extrapolateLeft: "clamp", extrapolateRight: "clamp", easing: Easing.out(Easing.cubic) });
+  const meetOpacity = interpolate(frame, [0, 10], [0, 1], {
+    extrapolateLeft: "clamp",
+    extrapolateRight: "clamp",
+  });
+  const meetY = interpolate(frame, [0, 10], [20, 0], {
+    extrapolateLeft: "clamp",
+    extrapolateRight: "clamp",
+    easing: Easing.out(Easing.cubic),
+  });
 
   // Feature pills
-  const features = ["AI Writer", "Smart Analytics", "Content Studio", "Auto Scheduler"];
+  const features = [
+    "AI Writer",
+    "Smart Analytics",
+    "Content Studio",
+    "Auto Scheduler",
+  ];
 
   // Exit
-  const exitOpacity = interpolate(frame, [115, 130], [1, 0], { extrapolateLeft: "clamp", extrapolateRight: "clamp" });
+  const exitOpacity = interpolate(frame, [115, 130], [1, 0], {
+    extrapolateLeft: "clamp",
+    extrapolateRight: "clamp",
+  });
 
   return (
     <div
@@ -73,7 +106,13 @@ export const ProductRevealScene: React.FC = () => {
       </div>
 
       {/* Logo with glow */}
-      <Glow color="#F4900C" intensity={40 * glowIntensity} pulsate pulseDuration={3} layers={3}>
+      <Glow
+        color="#F4900C"
+        intensity={40 * glowIntensity}
+        pulsate
+        pulseDuration={3}
+        layers={3}
+      >
         <Img
           src={LOGO_SVG}
           style={{
@@ -95,14 +134,24 @@ export const ProductRevealScene: React.FC = () => {
       >
         <TextAnimation
           className="text-[28px] font-medium text-center"
-          style={{ fontFamily: interFont, color: "rgba(255,255,255,0.7)", maxWidth: 600 }}
+          style={{
+            fontFamily: interFont,
+            color: "rgba(255,255,255,0.7)",
+            maxWidth: 600,
+          }}
           startFrom={30}
           createTimeline={({ textRef, tl, SplitText }) => {
             const split = new SplitText(textRef.current, { type: "words" });
             tl.fromTo(
               split.words,
               { opacity: 0, y: 15 },
-              { opacity: 1, y: 0, duration: 0.5, stagger: 0.06, ease: "power3.out" }
+              {
+                opacity: 1,
+                y: 0,
+                duration: 0.5,
+                stagger: 0.06,
+                ease: "power3.out",
+              },
             );
             return tl;
           }}
@@ -115,8 +164,18 @@ export const ProductRevealScene: React.FC = () => {
       <div style={{ display: "flex", gap: 16, marginTop: 48 }}>
         {features.map((feat, i) => {
           const pillDelay = 55 + i * 8;
-          const pillScale = spring({ frame, fps, config: { damping: 14, stiffness: 120 }, delay: pillDelay });
-          const pillOpacity = interpolate(frame, [pillDelay, pillDelay + 10], [0, 1], { extrapolateLeft: "clamp", extrapolateRight: "clamp" });
+          const pillScale = spring({
+            frame,
+            fps,
+            config: { damping: 14, stiffness: 120 },
+            delay: pillDelay,
+          });
+          const pillOpacity = interpolate(
+            frame,
+            [pillDelay, pillDelay + 10],
+            [0, 1],
+            { extrapolateLeft: "clamp", extrapolateRight: "clamp" },
+          );
           return (
             <div
               key={feat}

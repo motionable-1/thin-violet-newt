@@ -16,22 +16,35 @@ const { fontFamily: interFont } = loadFont("normal", {
   subsets: ["latin"],
 });
 
-const DASHBOARD_IMG = "https://pub-e3bfc0083b0644b296a7080b21024c5f.r2.dev/superx/1770417495356_k0rh02be3zd_superx_dashboard.webp";
+const DASHBOARD_IMG =
+  "https://pub-e3bfc0083b0644b296a7080b21024c5f.r2.dev/superx/1770417495356_k0rh02be3zd_superx_dashboard.webp";
 
 interface FeatureCardProps {
   icon: string;
   title: string;
   description: string;
   delay: number;
-  index: number;
 }
 
-const FeatureCard: React.FC<FeatureCardProps> = ({ icon, title, description, delay, index }) => {
+const FeatureCard: React.FC<FeatureCardProps> = ({
+  icon,
+  title,
+  description,
+  delay,
+}) => {
   const frame = useCurrentFrame();
   const { fps } = useVideoConfig();
 
-  const cardScale = spring({ frame, fps, config: { damping: 14, stiffness: 100 }, delay });
-  const cardOpacity = interpolate(frame, [delay, delay + 10], [0, 1], { extrapolateLeft: "clamp", extrapolateRight: "clamp" });
+  const cardScale = spring({
+    frame,
+    fps,
+    config: { damping: 14, stiffness: 100 },
+    delay,
+  });
+  const cardOpacity = interpolate(frame, [delay, delay + 10], [0, 1], {
+    extrapolateLeft: "clamp",
+    extrapolateRight: "clamp",
+  });
 
   return (
     <div
@@ -49,12 +62,31 @@ const FeatureCard: React.FC<FeatureCardProps> = ({ icon, title, description, del
         width: 280,
       }}
     >
-      <Img src={icon} style={{ width: 32, height: 32, flexShrink: 0, marginTop: 2 }} />
+      <Img
+        src={icon}
+        style={{ width: 32, height: 32, flexShrink: 0, marginTop: 2 }}
+      />
       <div>
-        <div style={{ fontFamily: interFont, fontSize: 16, fontWeight: 700, color: "#fff", marginBottom: 4 }}>
+        <div
+          style={{
+            fontFamily: interFont,
+            fontSize: 16,
+            fontWeight: 700,
+            color: "#fff",
+            marginBottom: 4,
+          }}
+        >
           {title}
         </div>
-        <div style={{ fontFamily: interFont, fontSize: 13, fontWeight: 400, color: "rgba(255,255,255,0.5)", lineHeight: 1.4 }}>
+        <div
+          style={{
+            fontFamily: interFont,
+            fontSize: 13,
+            fontWeight: 400,
+            color: "rgba(255,255,255,0.5)",
+            lineHeight: 1.4,
+          }}
+        >
           {description}
         </div>
       </div>
@@ -67,12 +99,27 @@ export const FeatureShowcaseScene: React.FC = () => {
   const { fps } = useVideoConfig();
 
   // Browser mockup entrance
-  const mockupScale = spring({ frame, fps, config: { damping: 14, stiffness: 60 }, delay: 5 });
-  const mockupOpacity = interpolate(frame, [5, 20], [0, 1], { extrapolateLeft: "clamp", extrapolateRight: "clamp" });
-  const mockupY = interpolate(frame, [5, 30], [60, 0], { extrapolateLeft: "clamp", extrapolateRight: "clamp", easing: Easing.out(Easing.cubic) });
+  const mockupScale = spring({
+    frame,
+    fps,
+    config: { damping: 14, stiffness: 60 },
+    delay: 5,
+  });
+  const mockupOpacity = interpolate(frame, [5, 20], [0, 1], {
+    extrapolateLeft: "clamp",
+    extrapolateRight: "clamp",
+  });
+  const mockupY = interpolate(frame, [5, 30], [60, 0], {
+    extrapolateLeft: "clamp",
+    extrapolateRight: "clamp",
+    easing: Easing.out(Easing.cubic),
+  });
 
   // Section title
-  const titleOpacity = interpolate(frame, [0, 10], [0, 1], { extrapolateLeft: "clamp", extrapolateRight: "clamp" });
+  const titleOpacity = interpolate(frame, [0, 10], [0, 1], {
+    extrapolateLeft: "clamp",
+    extrapolateRight: "clamp",
+  });
 
   // Feature cards
   const features = [
@@ -99,7 +146,10 @@ export const FeatureShowcaseScene: React.FC = () => {
   ];
 
   // Exit
-  const exitOpacity = interpolate(frame, [170, 185], [1, 0], { extrapolateLeft: "clamp", extrapolateRight: "clamp" });
+  const exitOpacity = interpolate(frame, [170, 185], [1, 0], {
+    extrapolateLeft: "clamp",
+    extrapolateRight: "clamp",
+  });
 
   return (
     <div
@@ -124,14 +174,25 @@ export const FeatureShowcaseScene: React.FC = () => {
       >
         <TextAnimation
           className="text-[20px] font-semibold text-center"
-          style={{ fontFamily: interFont, color: "#FFC367", letterSpacing: 3, textTransform: "uppercase" }}
+          style={{
+            fontFamily: interFont,
+            color: "#FFC367",
+            letterSpacing: 3,
+            textTransform: "uppercase",
+          }}
           startFrom={0}
           createTimeline={({ textRef, tl, SplitText }) => {
             const split = new SplitText(textRef.current, { type: "chars" });
             tl.fromTo(
               split.chars,
               { opacity: 0, y: 10 },
-              { opacity: 1, y: 0, duration: 0.4, stagger: 0.03, ease: "power2.out" }
+              {
+                opacity: 1,
+                y: 0,
+                duration: 0.4,
+                stagger: 0.03,
+                ease: "power2.out",
+              },
             );
             return tl;
           }}
@@ -186,7 +247,6 @@ export const FeatureShowcaseScene: React.FC = () => {
             title={feat.title}
             description={feat.description}
             delay={60 + i * 12}
-            index={i}
           />
         ))}
       </div>
