@@ -78,7 +78,7 @@ export const HookScene: React.FC = () => {
 
   // Headline word entrance
   const headlineWords = ["Growing", "on"];
-  const headlineWords2 = ["is"];
+
   const hardWord = "hard";
 
   const wordEntrance = (index: number) => {
@@ -115,7 +115,6 @@ export const HookScene: React.FC = () => {
   });
 
   // "is" word
-  const isDelay = 12;
   const isStyle = wordEntrance(3);
 
   // "hard" word
@@ -238,10 +237,7 @@ export const HookScene: React.FC = () => {
               alignItems: "center",
             }}
           >
-            <Img
-              src={X_LOGO_ICON}
-              style={{ width: 60, height: 60 }}
-            />
+            <Img src={X_LOGO_ICON} style={{ width: 60, height: 60 }} />
           </div>
 
           <span style={isStyle}>is</span>
